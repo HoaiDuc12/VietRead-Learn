@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VietRead Learn — Sổ Từ Vựng &amp; Ôn Tập</title>
+  <link rel="stylesheet" href="review.css" />
+</head>
+<body>
+  <div class="layout">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">V</div>
+        <div>
+          <h1>VietRead Learn</h1>
+          <p>Sổ từ vựng tiếng Anh &amp; Luyện nhớ lặp lại ngắt quãng (SRS)</p>
+        </div>
+      </div>
+      <div class="top-stats" id="topStats">
+        <div class="pill-stat"><strong id="stTotal">0</strong><span>Từ đã lưu</span></div>
+        <div class="pill-stat accent"><strong id="stDue">0</strong><span>Cần ôn</span></div>
+        <div class="pill-stat green"><strong id="stMastered">0</strong><span>Đã thuộc</span></div>
+        <div class="pill-stat amber"><strong id="stStreak">0 🔥</strong><span>Chuỗi ngày</span></div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="mainTabs">
+      <button class="tab active" data-tab="flashcard">🃏 Flashcard SRS</button>
+      <button class="tab" data-tab="quiz">⚡ Trắc nghiệm</button>
+      <button class="tab" data-tab="notebook">📓 Sổ từ vựng</button>
+      <button class="tab" data-tab="settings">⚙️ Từ đã biết &amp; Cài đặt</button>
+    </nav>
+
+    <main class="content">
+      <!-- Tab 1: Flashcard SRS -->
+      <section class="panel active" id="panel-flashcard">
+        <div id="flashcardStage"></div>
+      </section>
+
+      <!-- Tab 2: Multiple-Choice Quiz -->
+      <section class="panel" id="panel-quiz">
+        <div class="quiz-toolbar">
+          <div class="quiz-dir">
+            <label>Chiều kiểm tra:</label>
+            <select id="selQuizDir">
+              <option value="en-vi">Tiếng Anh → Tiếng Việt</option>
+              <option value="vi-en">Tiếng Việt → Tiếng Anh</option>
+            </select>
+          </div>
+          <button id="btnStartQuiz" class="btn btn-primary">🔄 Tạo bộ câu hỏi mới</button>
+        </div>
+        <div id="quizStage"></div>
+      </section>
+
+      <!-- Tab 3: Vocabulary Notebook -->
+      <section class="panel" id="panel-notebook">
+        <div class="notebook-controls">
+          <form id="addWordForm" class="add-word-form">
+            <input type="text" id="inputNewWord" placeholder="Nhập từ tiếng Anh muốn thêm nhanh (VD: resilient)..." autocomplete="off" />
+            <button type="submit" id="btnAddWord" class="btn btn-primary">+ Tra &amp; Lưu</button>
+          </form>
+
+          <div class="export-bar">
+            <button id="btnExportAnki" class="btn">📦 Xuất Anki (.tsv)</button>
+            <button id="btnExportCsv" class="btn">📊 Xuất CSV</button>
+            <button id="btnExportJson" class="btn">💾 Sao lưu JSON</button>
+            <label class="btn file-btn">
+              📥 Nhập JSON
+              <input type="file" id="fileImportJson" accept=".json" hidden />
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <input type="search" id="inputSearch" placeholder="🔍 Tìm từ tiếng Anh hoặc nghĩa tiếng Việt..." />
+          <div class="filter-pills" id="filterPills">
+            <button class="filter-pill active" data-filter="all">Tất cả</button>
+            <button class="filter-pill" data-filter="due">Cần ôn</button>
+            <button class="filter-pill" data-filter="new">Mới</button>
+            <button class="filter-pill" data-filter="learning">Đang học</button>
+            <button class="filter-pill" data-filter="mastered">Đã thuộc</button>
+          </div>
+        </div>
+
+        <div id="notebookList" class="notebook-list"></div>
+      </section>
+
+      <!-- Tab 4: Known Words & Settings -->
+      <section class="panel" id="panel-settings">
+        <div class="settings-grid">
+          <div class="card">
+            <h3>🔊 Cài đặt phát âm</h3>
+            <div class="form-row">
+              <label for="selAccent">Giọng đọc tiếng Anh (TTS dự phòng)</label>
+              <select id="selAccent">
+                <option value="en-US">Anh - Mỹ (en-US)</option>
+                <option value="en-GB">Anh - Anh (en-GB)</option>
+                <option value="en-AU">Anh - Úc (en-AU)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="rngRate">Tốc độ đọc: <span id="lblRate">0.95x</span></label>
+              <input type="range" id="rngRate" min="0.7" max="1.25" step="0.05" value="0.95" />
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>🌐 Tên miền tự động dịch</h3>
+            <p class="muted">Các trang web sẽ tự động bật dịch khi bạn mở:</p>
+            <div id="autoDomainsList" class="tag-list"></div>
+          </div>
+
+          <div class="card full-span">
+            <div class="card-head-row">
+              <div>
+                <h3>✓ Danh sách từ đã biết (<span id="knownCount">0</span>)</h3>
+                <p class="muted">Các từ này sẽ không còn bị gạch chân/trộn khi bạn đọc bài tiếng Anh. Nhấn ✕ để bỏ đánh dấu.</p>
+              </div>
+            </div>
+            <div id="knownWordsList" class="tag-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../shared/constants.js"></script>
+  <script src="../shared/srs.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="review.js"></script>
+</body>
+</html>

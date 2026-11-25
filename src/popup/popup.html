@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VietRead Learn</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-logo">V</div>
+        <div>
+          <h1 class="brand-name">VietRead Learn</h1>
+          <p class="brand-sub">Dịch web &amp; học từ tiếng Anh</p>
+        </div>
+      </div>
+      <button id="btnOpenReviewTop" class="icon-pill" title="Mở Sổ Từ Vựng &amp; Flashcard">
+        📚 Sổ từ
+      </button>
+    </header>
+
+    <!-- Main Action Card -->
+    <section class="hero-card">
+      <div class="site-row">
+        <span id="siteHost" class="site-host">Trang hiện tại</span>
+        <span id="pageStatusBadge" class="status-badge">Chưa dịch</span>
+      </div>
+      <button id="btnToggleTranslate" class="primary-btn">
+        <span id="btnToggleIcon">🌐</span>
+        <span id="btnToggleLabel">Dịch trang này sang Tiếng Việt</span>
+      </button>
+      <div class="hero-sub-actions">
+        <button id="btnAutoDomain" class="ghost-btn" title="Tự động dịch mỗi khi vào tên miền này">
+          ⚡ Tự động dịch trang này
+        </button>
+        <button id="btnPageVocab" class="ghost-btn" title="Xem danh sách từ vựng và quiz của bài hiện tại">
+          ✨ Từ bài này (<span id="pageVocabCount">0</span>)
+        </button>
+      </div>
+      <p id="statusHint" class="status-hint"></p>
+    </section>
+
+    <!-- EN -> VI Learning Mode Selector -->
+    <section class="section">
+      <div class="section-title">Chế độ đọc &amp; học (Anh → Việt)</div>
+      <div class="mode-grid" id="modeGrid">
+        <button class="mode-card" data-mode="bilingual">
+          <div class="mode-head">
+            <span class="mode-emoji">📖</span>
+            <span class="mode-name">Song ngữ + Học từ</span>
+          </div>
+          <div class="mode-desc">Gạch chân từ đáng học trong bản gốc + dịch tiếng Việt bên dưới.</div>
+        </button>
+
+        <button class="mode-card" data-mode="immersion">
+          <div class="mode-head">
+            <span class="mode-emoji">🧩</span>
+            <span class="mode-name">Đọc Việt, giữ từ Anh</span>
+          </div>
+          <div class="mode-desc">Dịch sang tiếng Việt nhưng trộn từ tiếng Anh quan trọng ngay trong câu.</div>
+        </button>
+
+        <button class="mode-card" data-mode="vietnamese">
+          <div class="mode-head">
+            <span class="mode-emoji">⚡</span>
+            <span class="mode-name">Dịch thuần Việt</span>
+          </div>
+          <div class="mode-desc">Đọc nhanh bằng tiếng Việt, bấm nút EN khi muốn đối chiếu câu gốc.</div>
+        </button>
+      </div>
+    </section>
+
+    <!-- Quick Learning Toggles -->
+    <section class="section">
+      <div class="section-title">Công cụ vừa đọc vừa nhớ</div>
+      <div class="toggle-list">
+        <label class="toggle-item">
+          <div>
+            <div class="toggle-label">Làm mờ bản dịch (hover để xem)</div>
+            <div class="toggle-sub">Tập đọc tiếng Anh trước, chỉ xem dịch khi cần (Alt+B)</div>
+          </div>
+          <input type="checkbox" id="chkBlurTranslation" />
+        </label>
+
+        <label class="toggle-item">
+          <div>
+            <div class="toggle-label">Hiện nghĩa gọn cạnh từ mới</div>
+            <div class="toggle-sub">Chú thích nhanh nghĩa tiếng Việt ngay cạnh từ nổi bật</div>
+          </div>
+          <input type="checkbox" id="chkInlineGloss" />
+        </label>
+
+        <label class="toggle-item">
+          <div>
+            <div class="toggle-label">Tra từ nhanh khi bôi đen</div>
+            <div class="toggle-sub">Bôi đen hoặc Alt + double-click bất kỳ từ tiếng Anh nào</div>
+          </div>
+          <input type="checkbox" id="chkSelectionLookup" />
+        </label>
+      </div>
+
+      <div class="select-row">
+        <div class="select-group">
+          <label for="selLevel">Trình độ lọc từ</label>
+          <select id="selLevel">
+            <option value="beginner">Cơ bản (A2+)</option>
+            <option value="intermediate">Trung cấp (B1–B2)</option>
+            <option value="advanced">Nâng cao (C1+)</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label for="selDensity">Số từ / đoạn</label>
+          <select id="selDensity">
+            <option value="2">Ít (2 từ)</option>
+            <option value="3">Vừa (3 từ)</option>
+            <option value="5">Nhiều (5 từ)</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mini Stats & Review CTA -->
+    <section class="stats-card">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div id="statSaved" class="stat-val">0</div>
+          <div class="stat-lbl">Từ đã lưu</div>
+        </div>
+        <div class="stat-box highlight">
+          <div id="statDue" class="stat-val">0</div>
+          <div class="stat-lbl">Cần ôn ngay</div>
+        </div>
+        <div class="stat-box">
+          <div id="statStreak" class="stat-val">0 🔥</div>
+          <div class="stat-lbl">Ngày liên tiếp</div>
+        </div>
+      </div>
+      <button id="btnOpenReview" class="review-btn">
+        🧠 Ôn Flashcard &amp; Trắc nghiệm
+      </button>
+    </section>
+
+    <footer class="footer">
+      Phím tắt: <kbd>Alt+T</kbd> dịch trang · <kbd>Alt+B</kbd> mờ dịch
+    </footer>
+  </div>
+
+  <script src="../shared/constants.js"></script>
+  <script src="../shared/srs.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

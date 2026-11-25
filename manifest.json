@@ -1,0 +1,70 @@
+{
+  "manifest_version": 3,
+  "name": "VietRead Learn - Dịch Web & Học Từ Tiếng Anh",
+  "short_name": "VietRead Learn",
+  "version": "1.0.0",
+  "description": "Dịch trang web sang tiếng Việt và hỗ trợ vừa đọc vừa học từ vựng tiếng Anh thông minh (song ngữ, trộn từ vựng, làm mờ bản dịch, phát âm, flashcard).",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "VietRead Learn - Dịch & Học Từ",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "contextMenus",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://translate.googleapis.com/*",
+    "https://api.dictionaryapi.dev/*",
+    "https://api.mymemory.translated.net/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "src/shared/constants.js",
+        "src/shared/vocab-filter.js",
+        "src/shared/srs.js",
+        "src/shared/storage.js",
+        "src/content/content.js"
+      ],
+      "css": [
+        "src/content/content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "toggle-translate": {
+      "suggested_key": {
+        "default": "Alt+T"
+      },
+      "description": "Bật hoặc tắt dịch trang web hiện tại"
+    },
+    "toggle-blur": {
+      "suggested_key": {
+        "default": "Alt+B"
+      },
+      "description": "Bật hoặc tắt làm mờ bản dịch tiếng Việt"
+    }
+  }
+}
